@@ -30,6 +30,10 @@ export const moduleResolvePlugin: ServerPlugin = ({ root, app, watcher }) => {
     ctx.type = 'js'
 
     const serve = async (id: string, file: string, type: string) => {
+      const ext = file.substr(file.lastIndexOf('.') + 1)
+      const hasExtRE = /^.*\.[^\\]+$/
+      ctx.path = ctx.path.match(hasExtRE) ? ctx.path : ctx.path + '.' + ext
+
       idToFileMap.set(id, file)
       fileToRequestMap.set(file, ctx.path)
       debug(`(${type}) ${id} -> ${getDebugPath(root, file)}`)
